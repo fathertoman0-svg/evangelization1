@@ -55,7 +55,7 @@ const translations = {
       }
     },
     adminTitle: "Owner Panel – Add Content",
-    loginTitle: "Owner Login",
+    loginTitle: "Login",
     loginInstruction: "Enter the owner password to manage content.",
     footer:
       "“Totus Tuus” – Inspired by St. John Paul II • For the glory of God and the salvation of souls."
@@ -233,27 +233,40 @@ function renderSection(container, sectionKey) {
       card.appendChild(link);
     }
 
+    if (item.file) {
+    const download = document.createElement("a");
+    download.className = "card-link";
+    download.href = item.file.content;
+    download.download = item.file.name;
+    download.textContent = {
+    en: "Download file",
+    pl: "Pobierz plik",
+    es: "Descargar archivo"
+    }[currentLang];
+    card.appendChild(download);
+}
     // Delete button (owner only)
-    if (isOwnerLoggedIn()) {
-      const del = document.createElement("button");
-      del.textContent = {
-        en: "Delete",
-        pl: "Usuń",
-        es: "Eliminar"
-      }[currentLang];
-      del.className = "delete-btn";
+if (isOwnerLoggedIn()) {
+  const del = document.createElement("button");
+  del.textContent = {
+    en: "Delete",
+    pl: "Usuń",
+    es: "Eliminar"
+  }[currentLang];
+  del.className = "delete-btn";
 
-      del.addEventListener("click", () => {
-        const index = contentData[sectionKey].indexOf(item);
-        if (index !== -1) {
-          contentData[sectionKey].splice(index, 1);
-          saveContent();
-          renderAllSections();
-        }
-      });
-
-      card.appendChild(del);
+  del.addEventListener("click", () => {
+    const index = contentData[sectionKey].indexOf(item);
+    if (index !== -1) {
+      contentData[sectionKey].splice(index, 1);
+      saveContent();
+      renderAllSections();
     }
+  });
+
+  card.appendChild(del);
+}
+
 
     container.appendChild(card);
   });
@@ -336,14 +349,11 @@ function updateAdminVisibility() {
   } else {
     adminPanel.classList.add("hidden");
     loginBtn.textContent = {
-      en: "Owner Login",
+      en: "Login",
       pl: "Logowanie Właściciela",
       es: "Acceso del Propietario"
     }[currentLang];
   }
-
-  // Re-render sections so delete buttons appear/disappear correctly
-  renderAllSections();
 }
 
 // Initialize events
@@ -414,16 +424,54 @@ function initEvents() {
     const url = document.getElementById("content-url").value.trim();
     const body = document.getElementById("content-body").value.trim();
     const lang = document.getElementById("content-lang").value;
+    const fileInput = document.getElementById("content-file");
+    const file = fileInput.files[0] || null;
+
 
     if (!title) {
       alert("Please enter a title.");
       return;
     }
 
-    const item = { type, title, url: url || null, body, lang };
-    contentData[section].push(item);
-    saveContent();
-    renderAllSections();
+    let fileData = null;
+
+if (file) {
+  fileData = {
+    name: file.name,
+    type: file.type,
+    size: file.size
+  };
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    fileData.content = e.target.result;
+    saveItem();
+  };
+  reader.readAsDataURL(file);
+} else {
+  saveItem();
+}
+
+function saveItem() {
+  const item = {
+    type,
+    title,
+    url: url || null,
+    body,
+    lang,
+    file: fileData
+  };
+
+  contentData[section].push(item);
+  saveContent();
+  renderAllSections();
+  form.reset();
+  document.getElementById("content-lang").value = currentLang;
+}
+  
+  contentData[section].push(item);
+  saveContent();
+  renderAllSections();
 
     form.reset();
     document.getElementById("content-lang").value = currentLang;
