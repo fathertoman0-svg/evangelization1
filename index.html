@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Catholic Evangelization</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="site-header">
+    <div class="logo-area">
+      <div class="logo-circle">✝</div>
+      <div class="logo-text">
+        <h1 id="site-title">Catholic Evangelization</h1>
+        <p id="site-subtitle">Totus Tuus – All Yours</p>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <a href="#mary" id="nav-mary">Mary</a>
+      <a href="#faith" id="nav-faith">Faith</a>
+      <a href="#jp2" id="nav-jp2">St. John Paul II</a>
+      <a href="#testimonies" id="nav-testimonies">Testimonies</a>
+      <a href="#saints" id="nav-saints">Saints</a>
+    </nav>
+
+    <div class="header-actions">
+      <div class="language-switcher">
+        <button data-lang="en" class="lang-btn active">EN</button>
+        <button data-lang="pl" class="lang-btn">PL</button>
+        <button data-lang="es" class="lang-btn">ES</button>
+      </div>
+      <button id="login-btn" class="login-btn">Login</button>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2 id="hero-title">“Be not afraid.”</h2>
+      <p id="hero-subtitle">
+        Sharing the beauty of the Catholic faith through Mary, the Saints, and living testimonies.
+      </p>
+      <a href="#mary" class="hero-cta" id="hero-cta">Begin the journey</a>
+    </div>
+    <div class="hero-overlay"></div>
+  </section>
+
+  <!-- Main Content Sections -->
+  <main class="main-content">
+    <section id="mary" class="content-section">
+      <div class="section-header">
+        <h2 id="section-mary-title">Mary</h2>
+        <p id="section-mary-subtitle">Mother, intercessor, and model of discipleship.</p>
+      </div>
+      <div class="cards-container" data-section="mary"></div>
+    </section>
+
+    <section id="faith" class="content-section">
+      <div class="section-header">
+        <h2 id="section-faith-title">Faith</h2>
+        <p id="section-faith-subtitle">Teachings, reflections, and resources to deepen your faith.</p>
+      </div>
+      <div class="cards-container" data-section="faith"></div>
+    </section>
+
+    <section id="jp2" class="content-section">
+      <div class="section-header">
+        <h2 id="section-jp2-title">St. John Paul II</h2>
+        <p id="section-jp2-subtitle">Words, life, and legacy of a beloved saint.</p>
+      </div>
+      <div class="cards-container" data-section="jp2"></div>
+    </section>
+
+    <section id="testimonies" class="content-section">
+      <div class="section-header">
+        <h2 id="section-testimonies-title">Testimonies</h2>
+        <p id="section-testimonies-subtitle">Stories of grace, conversion, and hope.</p>
+      </div>
+      <div class="cards-container" data-section="testimonies"></div>
+    </section>
+
+    <section id="saints" class="content-section">
+      <div class="section-header">
+        <h2 id="section-saints-title">Saints</h2>
+        <p id="section-saints-subtitle">Friends in heaven who walk with us on the journey.</p>
+      </div>
+      <div class="cards-container" data-section="saints"></div>
+    </section>
+  </main>
+
+  <!-- Admin Panel (Owner Only) -->
+  <section id="admin-panel" class="admin-panel hidden">
+    <h3 id="admin-title">Owner Panel – Add Content</h3>
+    <form id="content-form" class="content-form">
+      <div class="form-row">
+        <label for="section-select"><strong>Section</strong></label>
+        <select id="section-select" required>
+          <option value="mary">Mary</option>
+          <option value="faith">Faith</option>
+          <option value="jp2">St. John Paul II</option>
+          <option value="testimonies">Testimonies</option>
+          <option value="saints">Saints</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="type-select"><strong>Type</strong></label>
+        <select id="type-select" required>
+          <option value="blog">Blog / Reflection</option>
+          <option value="video">Video</option>
+          <option value="link">External Link</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="content-title"><strong>Title</strong></label>
+        <input type="text" id="content-title" required />
+      </div>
+
+      <div class="form-row">
+        <label for="content-url"><strong>URL (for video or link)</strong></label>
+        <input type="url" id="content-url" placeholder="https://..." />
+      </div>
+
+      <div class="form-row">
+        <label for="content-body"><strong>Short description or text</strong></label>
+        <textarea id="content-body" rows="4"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label for="content-lang"><strong>Language</strong></label>
+        <select id="content-lang">
+          <option value="en">English</option>
+          <option value="pl">Polish</option>
+          <option value="es">Spanish</option>
+        </select>
+      </div>
+
+      <button type="submit" class="primary-btn" id="admin-save-btn">Save Content</button>
+    </form>
+  </section>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="login-title">Login</h3>
+      <p id="login-instruction">Enter the owner password to manage content.</p>
+      <input type="password" id="owner-password" placeholder="Password" />
+      <div class="modal-actions">
+        <button id="login-confirm" class="primary-btn">Login</button>
+        <button id="login-cancel" class="secondary-btn">Cancel</button>
+      </div>
+      <p class="login-hint">You can later connect this to a real backend login.</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p id="footer-text">
+      “Totus Tuus” – Inspired by St. John Paul II • For the glory of God and the salvation of souls.
+    </p>
+  </footer>
+</body>
+</html>
