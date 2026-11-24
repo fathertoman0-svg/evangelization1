@@ -200,68 +200,87 @@ function renderSection(container, sectionKey) {
     const card = document.createElement("article");
     card.className = "card";
 
-    const type = document.createElement("div");
-    type.className = "card-type";
-    type.textContent = item.type.toUpperCase();
+const title = document.createElement("div");
 
-    const title = document.createElement("div");
-    title.className = "card-title";
-    title.textContent = item.title;
+title.className = "card-title";
+title.textContent = item.title;
 
-    const body = document.createElement("div");
-    body.className = "card-body";
-    body.textContent = item.body || "";
+let body;
 
-    card.appendChild(type);
-    card.appendChild(title);
-    card.appendChild(body);
-
-    if (item.url) {
-      const link = document.createElement("a");
-      link.className = "card-link";
-      link.href = item.url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent =
-        item.type === "video"
-          ? { en: "Watch video", pl: "Obejrzyj wideo", es: "Ver video" }[
-              currentLang
-            ]
-          : { en: "Open link", pl: "Otwórz link", es: "Abrir enlace" }[
-              currentLang
-            ];
-      card.appendChild(link);
-    }
-
-    if (item.file) {
-    const download = document.createElement("a");
-    download.className = "card-link";
-    download.href = item.file.content;
-    download.download = item.file.name;
-    download.textContent = {
-    en: "Download file",
-    pl: "Pobierz plik",
-    es: "Descargar archivo"
-    }[currentLang];
-    card.appendChild(download);
+if (item.file) {
+  body = document.createElement("a");
+  body.href = item.file.content;
+  body.download = item.file.name;
+  body.className = "card-body file-link";
+} else {
+  body = document.createElement("div");
+  body.className = "card-body";
 }
-    // Delete button (owner only)
+
+body.textContent = item.body || "";
+
+// Add video link underneath description if one exists
+if (item.url) {
+
+  const videoLink = document.createElement("a");
+
+  videoLink.href = item.url;
+  videoLink.target = "_blank";
+  videoLink.rel = "noopener noreferrer";
+
+  videoLink.className = "video-link";
+
+  videoLink.textContent = {
+    en: " ▶ Click here to watch the video",
+    pl: " ▶ Kliknij tutaj, aby obejrzeć film",
+    es: " ▶ Haz clic aquí para ver el video"
+  }[currentLang];
+
+  body.appendChild(document.createElement("br"));
+  body.appendChild(videoLink);
+}
+
+card.appendChild(title);
+card.appendChild(body);
+card.appendChild(title);
+card.appendChild(body);
+
+// Delete button (owner only)
 if (isOwnerLoggedIn()) {
   const del = document.createElement("button");
+
   del.textContent = {
     en: "Delete",
     pl: "Usuń",
     es: "Eliminar"
   }[currentLang];
+
   del.className = "delete-btn";
 
   del.addEventListener("click", () => {
-    const index = contentData[sectionKey].indexOf(item);
-    if (index !== -1) {
-      contentData[sectionKey].splice(index, 1);
-      saveContent();
-      renderAllSections();
+
+    // Safety check
+    if (!isOwnerLoggedIn()) {
+      alert("Owner login required.");
+      return;
     }
+
+    const confirmed = confirm(
+      {
+        en: "Delete this item?",
+        pl: "Usunąć ten element?",
+        es: "¿Eliminar este elemento?"
+      }[currentLang]
+    );
+
+    if (!confirmed) return;
+
+    contentData[sectionKey] = contentData[sectionKey].filter(
+    entry => entry.id !== item.id
+    );
+
+    saveContent();
+    renderAllSections();
   });
 
   card.appendChild(del);
@@ -331,7 +350,12 @@ function isOwnerLoggedIn() {
 
 function setOwnerLoggedIn(value) {
   localStorage.setItem("owner_logged_in", value ? "true" : "false");
+
   updateAdminVisibility();
+
+  // Refresh all cards so Delete buttons
+  // instantly appear/disappear
+  renderAllSections();
 }
 
 // Show/hide admin panel based on login
@@ -454,6 +478,7 @@ if (file) {
 
 function saveItem() {
   const item = {
+    id: Date.now(),
     type,
     title,
     url: url || null,
@@ -468,14 +493,8 @@ function saveItem() {
   form.reset();
   document.getElementById("content-lang").value = currentLang;
 }
-  
-  contentData[section].push(item);
-  saveContent();
-  renderAllSections();
-
-    form.reset();
-    document.getElementById("content-lang").value = currentLang;
-  });
+ 
+});
 }
 
 // Initial setup

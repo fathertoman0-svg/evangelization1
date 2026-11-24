@@ -193,8 +193,8 @@ body {
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
@@ -402,4 +402,80 @@ textarea {
   .hero-content h2 {
     font-size: 1.8rem;
   }
+}
+
+.card-description-link {
+  color: #5a4a3a;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.card-description-link:hover {
+  color: #9a7b4a;
+  text-decoration: underline;
+}
+
+
+.card-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+a.card-title {
+  color: #2b2520;
+  text-decoration: none;
+}
+
+a.card-title:hover {
+  color: #9a7b4a;
+  text-decoration: underline;
+}
+
+.card-description-link {
+  color: #5a4a3a;
+  text-decoration: none;
+  display: block;
+}
+
+.card-description-link:hover {
+  color: #9a7b4a;
+  text-decoration: underline;
+}
+
+.card-title {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2b2520;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.card-title:hover {
+  color: #9a7b4a;
+  text-decoration: underline;
+}
+
+.video-link {
+  color: #9a7b4a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.video-link:hover {
+  text-decoration: underline;
+}
+
+
+.file-link {
+  display: block;
+  color: #5a4a3a;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.file-link:hover {
+  color: #9a7b4a;
+  text-decoration: underline;
 }
